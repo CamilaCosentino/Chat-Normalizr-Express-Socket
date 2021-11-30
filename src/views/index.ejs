@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produuctos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        }
+        input{
+            display: inline-block;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<table class="table container " style="margin: 20px auto; border: 1px solid black; ">
+    <thead style="background-color: chocolate; color: white;">
+        <tr>
+            <th style="text-align: center; width: 400px; border-bottom: 1px solid black;border-right: 1px solid black;" scope="col">Nombre</th>
+            <th style="text-align: center;  width: 400px; border-bottom: 1px solid black;border-right: 1px solid black;"scope="col">Precio</th>
+           <th style="text-align: center; width: 400px;  border-bottom: 1px solid black; "scope="col ">Imagen</th>
+        </tr>
+    </thead>
+    <tbody class="datos">
+     
+    </tbody>
+</table>
+<div class="container"style="border:2px solid black;" >
+ 
+    <div class="row header" style="background-color: blueviolet; padding: 30px ;">
+        
+        <div class="titulo-container col-sm-10">
+            <h2 style="color: #fff; text-align:center;padding-top: 35px ; padding-bottom: 15px;">Centro de mensajes</h2>
+        </div>
+
+        <div class="porcentaje col-sm-2" style="padding-right: 10px;">
+            <div style="text-align: center; color: #fff; font-weight: bold; padding-bottom: 10px;"> <span>Compresión:</span></div>
+           <div style="background-color: darkslateblue; border-radius: 50%;margin:auto;padding: 20px; width: 80px; height: 80px;">  <span style="display:inline-block;  font-weight: bold; text-align:center ;padding-top: 5px; padding-left: 3px; color: #fff;"><%= compresion %></span></div>
+        </div>
+    </div>
+    <div class="msn">
+       
+        
+    </div>
+    <div class ="row"style="background-color: lightblue; padding: 30px ;">
+      
+            <form action="/login" onsubmit="return addMsn()" style="margin-top: 20px;">
+                <div class="row">
+                <div class="form-group col-lg-2">
+                    <label for="">Nombre</label>
+                    <input type="text"  id="nombre-u"name="nombre-u"class="form-control nombre-u">
+                </div>
+               
+                <div class="form-group col-lg-2">
+                    <label for="">Apellido</label>
+                    <input type="text"  name="apellido-u"class="form-control apellido-u">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label for="">Email</label>
+                    <input type="email" name="email-u"class="form-control email-u">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label for="">Edad</label>
+                    <input type="number"   name="edad-u" class="form-control edad-u">
+                </div>
+                <div class="form-group col-lg-2">
+                    
+                    <label for="">Alias</label>
+                    <input type="text"  name="alias-u"class="form-control alias-u">
+                </div>
+                <div class="form-group col-lg-2">
+                  
+                    <label for="">Url de Avatar</label>
+                    <input type="text"  name="avatar-u" class="form-control avatar-u">
+                </div>
+               
+
+            </div>
+            <div class="row">
+            <div class="form-group col-12">
+                <label for="">Mensaje</label>
+                <textarea class ="form-control mensajes-u" name="mensaje-u" ></textarea>
+            </div>
+
+        </div>
+        <div class="">
+                   
+            <input type="submit" class="btn "value="Enviar" style="margin-top: 35px; background-color: cadetblue;color: #fff; border: none;">
+        </div>
+            </form>
+        
+        
+    </div>
+</div>
+</div>
+<script src="https://cdn.socket.io/4.4.0/socket.io.min.js" integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
+<script>
+    const socket = io()
+    
+
+socket.on("message_back",(data) =>{
+   let html =  data.mensajes
+   .map((x)=>{
+    return 
+    `<p> ${x.id} </p>`
+   } )
+   let contenedor  =  document.querySelector(".msn").innerHTML = html
+})
+const addMsn = ()=>{
+        let msn = {
+            
+                id: document.querySelector(".email-u").value,
+               nombre: document.querySelector(".nombre-u").value,
+               apellido: document.querySelector(".apellido-u").value,
+               edad:  document.querySelector(".edad-u").value,
+               alias: document.querySelector(".alias-u").value,
+               avatar:document.querySelector(".avatar-u").value,
+
+           
+      
+            
+            text: document.querySelector(".mensajes-u").value,
+        }
+        socket.emit("data_client", msn)   
+    document.querySelector(".mensajes-u").value = ""   
+  return false
+
+    }
+
+</script>
+</body>
+</html>
